@@ -36,6 +36,9 @@
       <height>27</height>
      </rect>
     </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
    <widget class="QTextBrowser" name="textBrowser_DebugLog">
     <property name="geometry">
@@ -132,7 +135,7 @@
      <x>0</x>
      <y>0</y>
      <width>382</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

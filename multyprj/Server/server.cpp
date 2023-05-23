@@ -63,7 +63,7 @@ void Server::slotReadyRead()
             QImage image;
             in>>time>>fileName>> image;
 
-            image.save(QDate::currentDate().toString("yyyy-MM-dd")+"-"+time.toString("hh-mm-ss")+ fileName);
+            image.save(QDate::currentDate().toString("yyyy-MM-dd")+"-"+time.toString("hh-mm-ss") +"-"+fileName);
 
             nextBlockSize = 0;
             qDebug()<<fileName;
