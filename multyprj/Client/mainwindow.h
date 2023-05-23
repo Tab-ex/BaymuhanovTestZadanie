@@ -5,9 +5,9 @@
 #include <QTcpSocket>
 #include <QTime>
 #include <QFileInfo>
-#include<QImage>
+#include <QImage>
 #include <QImageReader>
-#include<QFileDialog>
+#include <QFileDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,17 +28,22 @@ private slots:
 
     void on_lineEdit_returnPressed();
 
-    void on_lineEdit_2_textChanged(const QString &arg1);
+    //void on_lineEdit_2_textChanged(const QString &arg1);
 
-    void on_lineEdit_3_textChanged(const QString &arg1);
+    //void on_lineEdit_3_textChanged(const QString &arg1);
 
-    void on_pushButton_3_clicked();
+    //void on_pushButton_3_clicked();
+
+    void on_pushButto_Connect_clicked();
+
+    void on_pushButton_OpenFile_clicked();
+
+    void on_pushButton_Send_clicked();
 
 private:
     Ui::MainWindow *ui;
     QTcpSocket *socket;
     QByteArray Data;
-    void SendToServer(QString str);
     void SendToServer(QString ip, int port, QString str);
     quint16 nextBlockSize;
     QString IP;

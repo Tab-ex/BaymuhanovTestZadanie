@@ -26,14 +26,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    IP = ui->lineEdit_IP->text();
-    qDebug() << IP;
 
-    QString PortS = ui->lineEdit_Port->text();
-    Port = PortS.toInt();
-    qDebug() << Port;
-
-    socket->connectToHost(IP, Port);
 }
 
 void MainWindow::slotReadyRead()
@@ -45,6 +38,7 @@ void MainWindow::slotReadyRead()
         //QString str;
         //in >> str;
         //ui->textBrowser->append(str);
+
         for (; ; )
         {
             if (nextBlockSize == 0)
@@ -73,57 +67,91 @@ void MainWindow::slotReadyRead()
     }
 }
 
-void MainWindow::SendToServer(QString str)
+//void MainWindow::SendToServer1(QString ip, int port, QString str)
+//{
+//    /*
+//     * Для работы данной функции должны быть подключены следущие библиотеки:
+//    #include <QTcpSocket>
+//    #include <QTime>
+//    #include <QFileInfo>
+//    #include<QImage>
+//    #include <QImageReader>
+//    #include<QFileDialog>
+
+//    Так же в файле .pro должна присутствовать следущяя строчка:
+//        QT       += core gui network
+
+//     */
+//    // TODO: По-хорошему нужно добавить проверку на валидность входных параметров
+//    // TODO: Объект socket должен создаваться внутри этой функции
+//    socket = new QTcpSocket(this);
+
+//    socket->connectToHost(ip, port);
+
+
+
+//    connect(socket, &QTcpSocket::readyRead, this, &MainWindow::slotReadyRead);
+//    connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
+//    nextBlockSize = 0;
+//    // TODO: Добавить проверку статуса сокета (если есть) открылся / не открылся
+
+//    Data.clear();
+//    QDataStream out(&Data, QIODevice::WriteOnly);
+//    out.setVersion(QDataStream::Qt_5_9);
+
+//    QFileInfo fileInfo(str); // Достаём из пути название фала
+//    QString fileName = fileInfo.fileName();
+
+//    QImageReader reader(str);
+//    QImage image = reader.read();
+
+//    out << quint16(0) << QTime::currentTime() << fileName << image;
+//    out.device()->seek(0);
+//    out << quint16(Data.size()-sizeof(quint16));
+//    socket->write(Data);
+
+//    // TODO: Внутри этой функции не должно быть никаких взаимодействий с GUI
+//    ui->lineEdit_FilePath->clear();
+//    // TODO: Освобождение ресурсов
+//}
+
+
+
+void SendToServer(QString ip, int port, QString filePath)
 {
-    Data.clear();
-    QDataStream out(&Data, QIODevice::WriteOnly);
+    //    /*
+    //     * Для работы данной функции должны быть подключены следущие библиотеки:
+    //    #include <QTcpSocket>
+    //    #include <QTime>
+    //    #include <QFileInfo>
+    //    #include<QImage>
+    //    #include <QImageReader>
+    //    #include<QFileDialog>
+
+    //    Так же в файле .pro должна присутствовать следущяя строчка:
+    //        QT       += core gui network
+
+
+    QTcpSocket socket;
+    socket.connectToHost(ip, port);
+
+    QByteArray data;
+    QDataStream out(&data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_9);
 
-    QFileInfo fileInfo(str); // Достаём из пути название фала
+    QFileInfo fileInfo(filePath);
     QString fileName = fileInfo.fileName();
 
-    QImageReader reader(str);
+    QImageReader reader(filePath);
     QImage image = reader.read();
 
     out << quint16(0) << QTime::currentTime() << fileName << image;
     out.device()->seek(0);
-    out << quint16(Data.size()-sizeof (quint16));
-    socket->write(Data);
-    ui->lineEdit_FilePath->clear();
+    out << quint16(data.size()-sizeof(quint16));
+    socket.write(data);
 }
 
-void MainWindow::SendToServer(QString ip, int port, QString str)
-{
-    // TODO: По-хорошему нужно добавить проверку на валидность входных параметров
-    // TODO: Объект socket должен создаваться внутри этой функции
-    socket->connectToHost(ip, port);
 
-    socket = new QTcpSocket(this);
-    connect(socket, &QTcpSocket::readyRead, this, &MainWindow::slotReadyRead);
-    connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
-
-    // TODO: Добавить проверку статуса сокета (если есть) открылся / не открылся
-
-    Data.clear();
-    QDataStream out(&Data, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_9);
-
-    QFileInfo fileInfo(str); // Достаём из пути название фала
-    QString fileName = fileInfo.fileName();
-
-    QImageReader reader(str);
-    QImage image = reader.read();
-
-    out << quint16(0) << QTime::currentTime() << fileName << image;
-    out.device()->seek(0);
-    out << quint16(Data.size()-sizeof(quint16));
-    socket->write(Data);
-
-    // TODO: Внутри этой функции не должно быть никаких взаимодействий с GUI
-    ui->lineEdit_FilePath->clear();
-
-    // TODO: Освобождение ресурсов
-}
 
 // TODO: Выполнить рефакторинг названий функция (сигналов/слотов)
 void MainWindow::on_pushButton_2_clicked()
@@ -140,20 +168,34 @@ void MainWindow::on_lineEdit_returnPressed()
 
 
 // TODO: Убрать неиспользуемые функции
-void MainWindow::on_lineEdit_2_textChanged(const QString &arg1)
-{
+//void MainWindow::on_lineEdit_2_textChanged(const QString &arg1){}
+//void MainWindow::on_lineEdit_3_textChanged(const QString &arg1){}
+//void MainWindow::on_pushButton_3_clicked(){}
 
+
+void MainWindow::on_pushButto_Connect_clicked()
+{
+    IP = ui->lineEdit_IP->text();
+    qDebug() << IP;
+
+    QString PortS = ui->lineEdit_Port->text();
+    Port = PortS.toInt();
+    qDebug() << Port;
+
+//    socket->connectToHost(IP, Port);
+    SendToServer(ui->lineEdit_IP->text(), Port, ui->lineEdit_FilePath->text());
 }
 
 
-void MainWindow::on_lineEdit_3_textChanged(const QString &arg1)
-{
-
-}
-
-
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_pushButton_OpenFile_clicked()
 {
     auto filename = QFileDialog::getOpenFileName(this);
+}
+
+
+void MainWindow::on_pushButton_Send_clicked()
+{
+    int port = (ui->label_Port->text()).toInt();
+   SendToServer(ui->lineEdit_IP->text(), port, ui->lineEdit_FilePath->text());
 }
 
