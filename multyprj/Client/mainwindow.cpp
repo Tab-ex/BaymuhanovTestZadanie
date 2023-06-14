@@ -142,7 +142,17 @@ void MainWindow::SendToServer(QString ip, int port, QString str)
 void MainWindow::on_pushButton_2_clicked()
 {
     // TODO: Параметры должны считываться с полей формы
-    SendToServer("127.0.0.1", 2323, ui->lineEdit_FilePath->text());
+    //SendToServer("127.0.0.1", 2323, ui->lineEdit_FilePath->text());
+    IP = ui->lineEdit_IP->text();
+    qDebug() << IP;
+
+    QString PortS = ui->lineEdit_Port->text();
+    Port = PortS.toInt();
+    qDebug() << Port;
+
+//    socket->connectToHost(IP, Port);
+    SendToServer(ui->lineEdit_IP->text(), Port, ui->lineEdit_FilePath->text());
+     ui->lineEdit_FilePath->clear();
 }
 
 void MainWindow::on_lineEdit_returnPressed()

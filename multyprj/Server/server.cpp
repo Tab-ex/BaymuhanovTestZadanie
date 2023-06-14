@@ -15,7 +15,7 @@ Server::Server()
     nextBlockSize =0;
 
     QDir().mkdir(QDate::currentDate().toString("yyyy-MM-dd"));
-    QDir::setCurrent("/"+QDate::currentDate().toString("yyyy-MM-dd"));
+    QDir::setCurrent("./"+QDate::currentDate().toString("yyyy-MM-dd"));
 }
 
 void Server::incomingConnection(qintptr socketDescriptor)
@@ -84,9 +84,10 @@ void Server::SendToClient(QString str)
     out<< quint16(0) <<QTime::currentTime()<<str;
     out.device()->seek(0);
     out<<quint16(Data.size()-sizeof (quint16));
-    //socket->write(Data);
+//    socket->write(Data);
     for(int i = 0; i <Sockets.size(); i++)
     {
         Sockets[i]->write(Data);
     }
+
 }
